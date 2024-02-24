@@ -14,8 +14,8 @@ scene.add(mesh)
 
 // Sizes
 const sizes = {
-    width: 800,
-    height: 600
+  width: 800,
+  height: 600
 }
 
 // Camera
@@ -25,7 +25,25 @@ scene.add(camera)
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+  canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
-renderer.render(scene, camera)
+
+// Time
+let time = Date.now()
+
+// Animations
+const tick = () => {
+  const currentTime = Date.now()
+  const deltaTime = currentTime - time
+  time = currentTime
+  // Update objects
+  // mesh.position.x +=0.01
+  // mesh.position.y +=0.01
+  mesh.rotation.y += 0.001 * deltaTime // this multiplication ensures the rotation is the same regardless of the frame rate
+  // Render
+  renderer.render(scene, camera)
+  window.requestAnimationFrame(tick)
+}
+
+tick()
