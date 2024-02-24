@@ -6,31 +6,38 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Objects
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
-const mesh = new THREE.Mesh(geometry, material)
-// Position (vector 3)
-// mesh.position.x = 0.7
-// mesh.position.y = -0.6
-// mesh.position.z = 1
-mesh.position.set(0.7, -0.6, 1) // same as above in one command
-
-// Scale (vector 3)
-mesh.scale.set(2, 0.5, 0.5)
-
-// Rotation (euler)
-mesh.rotation.reorder('YXZ') // change order of axis rotation - first rotate on y then on x etc.
-mesh.rotation.set(Math.PI*.25, Math.PI*.25, 0) // pi 3.14159 is half rotation
-
 // Axes Helper
 const axesHelper = new THREE.AxesHelper()
 
-scene.add(mesh)
-scene.add(axesHelper)
 
-// mesh.position.normalize() // reduce vector length (between the center of the scene and object's position) to 1
-// console.log(mesh.position.length()) // distance between the center of the scene and object's position
+// Object Group
+const group = new THREE.Group()
+const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 'purple' })
+)
+group.add(cube1)
+
+const cube2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 'red' })
+)
+cube2.position.x = -2
+group.add(cube2)
+
+const cube3 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 'yellow' }),
+)
+cube3.position.x = 2
+group.add(cube3)
+
+group.position.y = 1
+group.scale.y = 2
+group.rotation.y = 1
+
+scene.add(group)
+scene.add(axesHelper)
 
 // Sizes
 const sizes = {
@@ -42,12 +49,6 @@ const sizes = {
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
 camera.position.z = 3
 scene.add(camera)
-
-// LookAt
-camera.lookAt(new THREE.Vector3(3, 0, 1 ))
-camera.lookAt(mesh.position) // look straight at the cube
- 
-// console.log(mesh.position.distanceTo(camera.position)) // distance from object to camera
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
